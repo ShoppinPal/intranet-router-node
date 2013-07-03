@@ -1,0 +1,9 @@
+{
+  "name": "intranet-router",
+	"version": "0.0.2",
+	"description": "Node.js does the work from the request from the RabbitMQ request",
+
+	"dependencies": {
+		"amqp": "*"
+	}
+}
