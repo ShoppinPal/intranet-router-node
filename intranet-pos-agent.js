@@ -10,7 +10,7 @@ var requestReady =  new EventEmitter();
 // Step 1: Establishes a conenction with RabbitMQ and
 //         sits in an infinite loop listening for jobs.
 connection.on('ready', function(){
-  connection.queue(process.env.REQUEST_QUEUE, {autoDelete: false, passive: true}, function(queue){
+  connection.queue(process.env.REQUEST_QUEUE, {autoDelete: false, passive: true, durable: true}, function(queue){
     queue.bind(process.env.REQUEST_QUEUE);
     console.log('[*] Waiting for request. To exit press CTRL+C');
 
