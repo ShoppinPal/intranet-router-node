@@ -1,19 +1,15 @@
 #!/bin/sh
 # run this script as ". ./setenv.sh"
 
-RABBITMQ_URL=""
-REQUEST_QUEUE=""
-
-SERVER_USERNAME=""
-SERVER_PASSWORD=""
-
-SERVER_HOST=""
-SERVER_PORT=
-
-export RABBITMQ_URL
-export REQUEST_QUEUE
-export SERVER_USERNAME
-export SERVER_PASSWORD
-
-export SERVER_HOST
-export SERVER_PORT
+#!/bin/sh
+# This script is used to read the .env file and setup the enviroment variables for local testing
+echo "###"
+echo Its best to invoke this script as: '. ./setenv.sh' rather than './setenv.sh'
+echo "###"
+while read kv
+do
+    key=${kv%%=*}
+    val=${kv#*=}
+    echo export $key="$val"
+    export $key="$val"
+done < ".env"
