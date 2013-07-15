@@ -125,7 +125,7 @@ requestReady.on('finished',function(connectionOptions,result){
       {
       "correlationId": result.correlationId,
       "contentType":"application/json",
-      "headers": {"__TypeId__": "com.sample.amqp.ResponseDelegate"}
+          "headers": {"__TypeId__": process.env.RESPONSE_TYPE_ID}
       }
       ); 
     });
