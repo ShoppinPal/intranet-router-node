@@ -41,7 +41,7 @@ var getReadOnlyConnectionOptions = function() {
     port: process.env.SERVER_PORT,
     //ca: [fs.readFileSync('')],
     rejectUnauthorized: false,
-    base64Encoded: ,
+    base64Encoded: false,
     path: '', // per request-scope variable
     method: 'GET', // per request-scope variable
     headers: {
