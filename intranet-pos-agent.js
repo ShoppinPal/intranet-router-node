@@ -9,7 +9,8 @@ if (!(process.env.RABBITMQ_URL &&
       process.env.SERVER_USERNAME &&
       process.env.SERVER_PASSWORD &&
       process.env.SERVER_HOST &&
-      process.env.SERVER_PORT))
+      process.env.SERVER_PORT &&
+      process.env.RESPONSE_TYPE_ID))
 {
   console.error('FATAL: All of the required environment variables have not been configured');
   process.exit(1);
