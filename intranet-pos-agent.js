@@ -4,6 +4,17 @@ var fs = require('fs');
 var https = require('https');
 var EventEmitter = require('events').EventEmitter;
 
+if (!(process.env.RABBITMQ_URL &&
+      process.env.REQUEST_QUEUE &&
+      process.env.SERVER_USERNAME &&
+      process.env.SERVER_PASSWORD &&
+      process.env.SERVER_HOST &&
+      process.env.SERVER_PORT))
+{
+  console.error('FATAL: All of the required environment variables have not been configured');
+  process.exit(1);
+}
+
 var connection = amqp.createConnection({url: process.env.RABBITMQ_URL});
 var requestReady =  new EventEmitter();
 
