@@ -22,17 +22,23 @@ var requestReady =  new EventEmitter();
 // Step 1: Establishes a conenction with RabbitMQ and
 //         sits in an infinite loop listening for jobs.
 connection.on('ready', function(){
-  connection.queue(process.env.REQUEST_QUEUE, {autoDelete: false, passive: true, durable: true}, function(queue){
-    queue.bind(process.env.REQUEST_QUEUE);
-    console.log('[*] Waiting for request. To exit press CTRL+C');
+  connection.queue(
+    process.env.REQUEST_QUEUE,
+    {autoDelete: false, durable: true},
+    function(queue){
+      queue.bind(process.env.REQUEST_QUEUE);
+      console.log('[*] Waiting for request. To exit press CTRL+C');
 
-    queue.subscribe(function(msg,headers,deliveryInfo){
-      // called once per message being picked off RabbitMQ
-      // so its request-scoped in a manner of speaking
-      optionsSetup(msg, headers, deliveryInfo);
-    });
-  });
-});    
+      queue.subscribe(
+        function(msg,headers,deliveryInfo){
+          // called once per message being picked off RabbitMQ
+          // so its request-scoped in a manner of speaking
+          optionsSetup(msg, headers, deliveryInfo);
+        }
+      );
+    }
+  );
+});
 
 
 var getReadOnlyConnectionOptions = function() {
@@ -100,33 +106,33 @@ var optionsSetup = function(msg, headers, deliveryInfo){
 
 requestReady.on('finished',function(connectionOptions,result){
   var req = https.request(connectionOptions, function(res) {
-  var job = {
-    "responseStatus": res.statusCode,
-    "responseHeaders": res.headers,
-    "responsePayload": ""
-  };
-  if (base64Encoded === true){
-    res.setEncoding('binary');
-  }
-
-  res.on('data', function(chunk) {
-    console.log("Loading data chunk..");
-    job.responsePayload += chunk;
-  });
-
-  res.on('end',function() {
-     if (base64Encoded === true){
-    job.responsePayload = new Buffer(job.responsePayload, 'binary').toString('base64');
+    var job = {
+      "responseStatus": res.statusCode,
+      "responseHeaders": res.headers,
+      "responsePayload": ""
+    };
+    if (base64Encoded === true){
+      res.setEncoding('binary');
     }
-    console.log("We are publishing..");
-    connection.publish(
-      result.rabbitReplyQueue,
-      job,
-      {
-      "correlationId": result.correlationId,
-      "contentType":"application/json",
-          "headers": {"__TypeId__": process.env.RESPONSE_TYPE_ID}
+
+    res.on('data', function(chunk) {
+      console.log("Loading data chunk..");
+      job.responsePayload += chunk;
+    });
+
+    res.on('end',function() {
+      if (base64Encoded === true) {
+        job.responsePayload = new Buffer(job.responsePayload, 'binary').toString('base64');
       }
+      console.log("We are publishing..");
+      connection.publish (
+        result.rabbitReplyQueue,
+        job,
+        {
+          "correlationId": result.correlationId,
+          "contentType":"application/json",
+          "headers": {"__TypeId__": process.env.RESPONSE_TYPE_ID}
+        }
       ); 
     });
   });
@@ -134,7 +140,7 @@ requestReady.on('finished',function(connectionOptions,result){
   req.end();
 
   req.on('error', function(e) {
-  console.error("houston we have a problem\n" + e);
+    console.error("houston we have a problem\n" + e);
   });
 });
 
