@@ -3,6 +3,8 @@ intranet-router-node
 
 Intranet-Router handles the jobs from the queue that cloud-router posts to.
 
+![alt text](https://raw.github.com/ShoppinPal/cloud-pos-router/master/architecture.png "Architecture")
+
 Set up a env file
   Create setenv.sh file or edit the blank shell provided in this repo
 
