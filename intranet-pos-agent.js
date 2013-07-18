@@ -101,10 +101,10 @@ var optionsSetup = function(msg, headers, deliveryInfo){
     "correlationId" : deliveryInfo.correlationId
   };
  
-  requestReady.emit('finished',connectionOptions,result);
+  requestReady.emit('finished',connectionOptions,result,base64Encoded);
 };
 
-requestReady.on('finished',function(connectionOptions,result){
+requestReady.on('finished',function(connectionOptions,result,base64Encoded){
   var req = https.request(connectionOptions, function(res) {
     var job = {
       "responseStatus": res.statusCode,
