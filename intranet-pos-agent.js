@@ -101,7 +101,7 @@ var optionsSetup = function(msg, headers, deliveryInfo){
     "correlationId" : deliveryInfo.correlationId
   };
  
-  requestReady.emit('finished',result,connectionOptions);
+  requestReady.emit('finished',connectionOptions,result);
 };
 
 requestReady.on('finished',function(connectionOptions,result){
